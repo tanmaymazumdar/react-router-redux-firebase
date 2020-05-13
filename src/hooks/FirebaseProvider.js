@@ -1,9 +1,21 @@
-import React, { useMemo, createContext, useContext } from 'react'
+import React, { useMemo, createContext, useContext, useReducer } from 'react'
 
 /**
  * Create a firebase context for FirebaseProvier.
  */
 export const FirebaseContext = createContext(null)
+
+const initialState = {count: 0}
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    default:
+      throw new Error();
+  }
+}
 
 /**
  * The Firebase Context Api
@@ -37,17 +49,18 @@ export const FirebaseContext = createContext(null)
  * @param {React.children} config The firebase config object.
  */
 export const FirebaseProvider = ({ children, firebase, config }) => {
+	const [state, dispatch] = useReducer(reducer, initialState)
+
 	const extendedFirebase = useMemo(() => {
 		const extendedFirebase = firebase.initializeApp(config)
-
-		// TODO: Add `useReducer` hook to provide redux like environment.
 
 		return {
 			name: extendedFirebase.name,
 			auth: extendedFirebase.auth(),
 		}
 	}, [firebase, config])
-	return <FirebaseContext.Provider value={extendedFirebase}>{children}</FirebaseContext.Provider>
+
+	return <FirebaseContext.Provider value={{...extendedFirebase, state, dispatch}}>{children}</FirebaseContext.Provider>
 }
 
 /**

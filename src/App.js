@@ -4,9 +4,14 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { useFirebase } from './hooks/FirebaseProvider'
 
 const Home = _ => {
+	const fb = useFirebase()
+	const {state, dispatch} = fb
+
 	return (
 		<div>
+			{state.count}
 			<h2>Home</h2>
+			<button onClick={() => dispatch({type: 'increment'})}>+</button>
 		</div>
 	)
 }
