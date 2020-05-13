@@ -40,6 +40,8 @@ export const FirebaseProvider = ({ children, firebase, config }) => {
 	const extendedFirebase = useMemo(() => {
 		const extendedFirebase = firebase.initializeApp(config)
 
+		// TODO: Add `useReducer` hook to provide redux like environment.
+
 		return {
 			name: extendedFirebase.name,
 			auth: extendedFirebase.auth(),
@@ -72,4 +74,4 @@ export const FirebaseProvider = ({ children, firebase, config }) => {
  *   )
  * }
  */
-export const useFirebase = useContext(FirebaseContext)
+export const useFirebase = _ => useContext(FirebaseContext)

@@ -1,6 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
+import { useFirebase } from './hooks/FirebaseProvider'
+
 const Home = _ => {
 	return (
 		<div>
@@ -25,20 +27,28 @@ const Dashboard = () => {
 	)
 }
 
-const App = _ => (
-	<Router>
-		<Switch>
-			<Route exact path='/'>
-				<Home />
-			</Route>
-			<Route path='/about'>
-				<About />
-			</Route>
-			<Route path='/dashboard'>
-				<Dashboard />
-			</Route>
-		</Switch>
-	</Router>
-)
+/**
+ * Define initial critical route.
+ */
+const App = _ => {
+	const fb = useFirebase()
+	console.log(fb)
+
+	return (
+		<Router>
+			<Switch>
+				<Route exact path='/'>
+					<Home />
+				</Route>
+				<Route path='/about'>
+					<About />
+				</Route>
+				<Route path='/dashboard'>
+					<Dashboard />
+				</Route>
+			</Switch>
+		</Router>
+	)
+}
 
 export default App
